@@ -9,22 +9,22 @@ R = 8.18;
 vi_hover = sqrt(W/(2*pi*rho*R^2))
 
 
-%forward flight highspeed
+%% forward flight highspeed
 V = linspace(100 ,200,5)*1000/3600;
 V_bar_h = V/vi_hover;
 CDS = 1.5;
 D_fus_h = CDS*0.5*rho*V.*V;
 alpha_h = asind(D_fus_h/W);
-
+%for high speed V= V_r
 v_i_high = W./(2*rho*pi*R^2*V)
 
-%forward flight low speed
+%% forward flight low speed
 V_l = linspace(25 ,100,4)*1000/3600;
 V_bar_l = V_l/vi_hover;
 CDS = 1.5;
 D_fus_l = CDS*0.5*rho*V_l.*V_l;
 alpha_l = asind(D_fus_l/W);
-
+%Approximationg for low speed
 vi_bar = sqrt(-V_bar_l.^2/2 + sqrt(V_bar_l.^4/4 +1))
 v_i_low = vi_bar * vi_hover
 x = linspace(25,200,8)*1000/3600
