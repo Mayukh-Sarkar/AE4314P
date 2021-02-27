@@ -35,35 +35,39 @@ legend('Total power','Profile power','Induced power','Parasite Power')
 
 %% tail induced%% Helicopter Performance assignment 1 calculations
 %hover
+g = 9.81;
+MTOW = 9979 * g;
+W = MTOW;
+rho = 1.225;
+R = 8.18;
 
-
-vi_hover_t = sqrt(T_t/(2*pi*rho*R_t^2));
+vi_hover = sqrt(W/(2*pi*rho*R^2));
 
 
 %% forward flight highspeed
 V_h = linspace(100 ,300,100)*1000/3600;
-V_bar_h_t = V_h/vi_hover_t;
+V_bar_h = V_h/vi_hover;
 CDS = 1.5;
 D_fus_h = CDS*0.5*rho*V_h.*V_h;
 alpha_h = asind(D_fus_h/W);
 %for high speed V= V_r
-v_i_high_t = T_t./(2*rho*pi*R^2*V_h);
-v_i_bar_h_t = v_i_high_t/vi_hover_t;
+v_i_high = W./(2*rho*pi*R^2*V_h);
+v_i_bar_h = v_i_high/vi_hover;
 
 %% forward flight low speed
 V_l = linspace(25 ,100,100)*1000/3600;
-V_bar_l_t = V_l/vi_hover_t;
+V_bar_l = V_l/vi_hover;
 CDS = 1.5;
 D_fus_l = CDS*0.5*rho*V_l.*V_l;
 alpha_l = asind(D_fus_l/W);
 %Approximationg for low speed
-vi_bar_low_t = sqrt(-V_bar_l_t.^2/2 + sqrt(V_bar_l_t.^4/4 +1));
-v_i_low_t = vi_bar_low_t * vi_hover_t;
+vi_bar_low = sqrt(-V_bar_l.^2/2 + sqrt(V_bar_l.^4/4 +1));
+v_i_low_ = vi_bar_low * vi_hover;
 
 
-v_i_bar_t = [vi_bar_low_t v_i_bar_h_t(2:end)];
+
 %% tail rotor power forward bem
-Coeff = (1 + 1.5*mu_t.^2*R_t^2/R_e_t^2);
-C_l_bar_t = 6*T_t*(R_t/R_e_t)^3./(1.225*gammaR_t^2*pi*R_t^2.*Coeff*sigma_t);
-C_d_bar_t = 0.015;
-p_tail = 1.1*1.3*T_t*v_i_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8;
+% Coeff = (1 + 1.5*mu_t.^2*R_t^2/R_e_t^2);
+% C_l_bar_t = 6*T_t*(R_t/R_e_t)^3./(1.225*gammaR_t^2*pi*R_t^2.*Coeff*sigma_t);
+% C_d_bar_t = 0.015;
+% p_tail = 1.1*1.3*T_t*vi_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8;
