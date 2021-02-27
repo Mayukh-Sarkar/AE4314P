@@ -1,7 +1,7 @@
 %% Helicopter Performance assignment 1 calculations
 %hover
 g = 9.81;
-MTOW = 7708 * g;
+MTOW = 9979 * g;
 W = MTOW;
 rho = 1.225;
 R = 8.18;
@@ -34,5 +34,5 @@ plot(x,y1,'g')
 hold on
 plot(x,y2,'b')
 xlabel('Forward velocity(m/s)')
-ylabel('induced velocity(m/s)')
-legend('Glauret','Haffner')
+ylabel('Induced velocity(m/s)')
+legend('Glauert','Haffner')
