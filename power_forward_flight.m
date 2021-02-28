@@ -66,4 +66,8 @@ v_i_bar_t = [vi_bar_low_t v_i_bar_h_t(2:end)];
 Coeff = (1 + 1.5*mu_t.^2*R_t^2/R_e_t^2);
 C_l_bar_t = 6*T_t*(R_t/R_e_t)^3./(1.225*gammaR_t^2*pi*R_t^2.*Coeff*sigma_t);
 C_d_bar_t = 0.015;
-p_tail = 1.1*1.3*T_t*v_i_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8;
+p_tail = (1.1*1.3*T_t*v_i_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8)/1000;
+figure(2)
+plot(V,p_tail,'LineWidth',1.25)
+xlabel('Velocity [m/s]')
+ylabel('Power[kW]')
