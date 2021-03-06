@@ -1,8 +1,8 @@
 %% Helicopter Performance assignment 1 calculations
 %hover
 g = 9.81;
-MTOW = 9979 * g;
-W = MTOW;
+MTOW = 9979;
+W = MTOW*g;
 rho = 1.225;
 R = 8.18;
 
@@ -10,9 +10,9 @@ vi_hover = sqrt(W/(2*pi*rho*R^2));
 
 
 %% forward flight highspeed
-V_h = linspace(100 ,300,100)*1000/3600;
+V_h = linspace(100 ,360,100)*1000/3600;
 V_bar_h = V_h/vi_hover;
-CDS = 1.5;
+CDS = 1.75;
 D_fus_h = CDS*0.5*rho*V_h.*V_h;
 alpha_h = asind(D_fus_h/W);
 %for high speed V= V_r
@@ -22,7 +22,7 @@ v_i_bar_h = v_i_high/vi_hover;
 %% forward flight low speed
 V_l = linspace(25 ,100,100)*1000/3600;
 V_bar_l = V_l/vi_hover;
-CDS = 1.5;
+CDS = 1.75;
 D_fus_l = CDS*0.5*rho*V_l.*V_l;
 alpha_l = asind(D_fus_l/W);
 %Approximationg for low speed
