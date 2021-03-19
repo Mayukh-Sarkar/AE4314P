@@ -14,10 +14,10 @@ gammat = gammaR_t/R_t;
 N =4;
 c_t = 0.265;
 c = 0.53;
-R_e = 0.87*R;
+R_e = 0.97*R;
 R_e_t = 0.97*R_t;
-l_t = 9.9276;
-P_hover = 1.956*10^6;
+l_t = 9.855;
+P_hover = 1956000;
 T =W;
 T_t = P_hover/(gamma*l_t);
 P_para = CDS*0.5*rho*V.*V.*V/1000;
@@ -61,13 +61,13 @@ alpha_l = asind(D_fus_l/W);
 vi_bar_low_t = sqrt(-V_bar_l_t.^2/2 + sqrt(V_bar_l_t.^4/4 +1));
 v_i_low_t = vi_bar_low_t * vi_hover_t;
 
-
+v_i_t = [v_i_low_t v_i_high_t(2:end)];
 v_i_bar_t = [vi_bar_low_t v_i_bar_h_t(2:end)];
 %% tail rotor power forward bem
 Ct_m = T_t/(rho*pi*R_t^2*(gammaR_t)^2);
 Cl_bar_t = 6.6*Ct_m/sigma_t;
 C_d_bar_t = 0.012;
-P_tail = (1.1*1.3*T_t*v_i_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8)/1000;
+P_tail = (1.1*1.4*T_t*v_i_bar_t+sigma_t * C_d_bar_t*1.225*(gammaR_t)^3*pi*R_t^2*(1+4.65*mu_t.^2)/8)/1000;
 figure(2)
 plot(V,P_tail,'LineWidth',1.25)
 xlabel('Velocity [m/s]')
