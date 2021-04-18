@@ -10,7 +10,7 @@ vi_hover = sqrt(W/(2*pi*rho*R^2));
 
 
 %% forward flight highspeed
-V_h = linspace(100 ,296,100)*1000/3600;
+V_h = linspace(100 ,361,100)*1000/3600;
 V_bar_h = V_h/vi_hover;
 CDS = 1.75;
 D_fus_h = CDS*0.5*rho*V_h.*V_h;
@@ -20,7 +20,7 @@ v_i_high = W./(2*rho*pi*R^2*V_h);
 v_i_bar_h = v_i_high/vi_hover;
 
 %% forward flight low speed
-V_l = linspace(25 ,100,100)*1000/3600;
+V_l = linspace(0 ,100,100)*1000/3600;
 V_bar_l = V_l/vi_hover;
 CDS = 1.75;
 D_fus_l = CDS*0.5*rho*V_l.*V_l;
