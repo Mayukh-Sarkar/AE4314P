@@ -43,4 +43,8 @@ hold on
 plot(V,rad2deg(theta_0) , 'b')
 hold off
 xlim([0 100])
+xlabel('V(m/s)')
+ylabel('Angle(degrees)')
+legend('cyclic pitch','collective pitch')
+grid on
 
