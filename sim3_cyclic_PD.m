@@ -3,21 +3,26 @@
 clear
 %INITIAL DATA HELICOPTER
 g=9.81;	
-cla=5.7; %NACA 0012
-volh=.075;	%blade solidity	
-lok=6;
-cds=1.5;
-mass=2200;
-rho=1.225;
-vtip=200;
-diam=2*7.32;
-iy=10615;
-mast=1;
+cla = 5.73 ;%rad
+volh  = 0.082; %solidity of main rotor
+lok=7.8829; %checked but not sure
+cds=1.5; %checked
+mass=9979; %MTOW
+rho=1.225; %checked
+vtip=220.98; %checked
+diam=2*8.18; %checked
+tau = .1;
+iy=94475.21158; %from own calculations
+mast=1; %weet niet wat het is
 omega=vtip/(diam/2);
 area=pi/4*diam^2;
-tau=.1;		%time constant in dynamiCs inflow!!!
-collect(1)=6*pi/180;
-longit(1)=0*pi/180;
+collect(1)=0.0664;
+% W= mass*g;
+longit(1)=0;
+V = 46.3;
+% D_fus = 0.5*cds*V^2;
+% theta_f = atan(-D_fus/W);
+
 
 %initial values;
 t0=0;
@@ -56,7 +61,13 @@ for i=1:aantal
 
 c(i)=u(i)*sin(pitch(i))-w(i)*cos(pitch(i));
 h(i)=-z(i);
-collect(i)=collect(1);
+v(i) = sqrt(u(i)^2 + w(i)^2);
+k1 = 0.06;
+k3 = 0.2;
+h_des = 150;
+v_des = 90;
+c_des = k3*(h_des - h(i));
+collect(i) = 5/180*pi + k1*(c_des-c(i));
 
 %Defining the differential equations
 
@@ -110,6 +121,8 @@ zdot(i)=-c(i);
 labidot(i)=(ctelem(i)-ctglau(i))/tau;
 %corrdot(i)=uwens-u(i);
 %corrcdot(i)=cwens(i)-c(i);
+c_des = k3*(h_des - h(i));
+collect(i) = 5/180*pi + k1*(c_des-c(i));
 
 u(i+1)=u(i)+stap*udot(i);
 w(i+1)=w(i)+stap*wdot(i);
@@ -119,15 +132,31 @@ x(i+1)=x(i)+stap*xdot(i);
 labi(i+1)=labi(i)+stap*labidot(i);
 z(i+1)=z(i)+stap*zdot(i);
 t(i+1)=t(i)+stap;
-end;
+% V(i) = sqrt(u(i)^2 + w(i)^2);
+%      if t(i) == 100
+%          Vdesi = 90;
+%          dvdot(i) = Vdesi - V(i);
+%          dx(i+1) =dx(i)+dxdot(i)*stap;
+%          pitchdesi(i) = k4*dxdot(i) +k5*u(i) + k6*dx(i);
+%      if 
 
-plot(t,u),xlabel('t (s)'),ylabel('u(m)'),grid,pause;
-plot(t,pitch*180/pi),xlabel('t (s)'),ylabel('pitch(deg)'),grid,pause;
-plot(t,x),xlabel('t (s)'),ylabel('x(m)'),grid,pause;
-plot(t,w),xlabel('t (s)'),ylabel('w(m)'),grid,pause;
-plot(t,q),xlabel('t (s)'),ylabel('q(m)'),grid,pause; 
-plot(t,labi),xlabel('t (s)'),ylabel('labi(m)'),grid,pause;
-plot(t,-z),xlabel('t (s)'),ylabel('h(m)'),grid,pause;
-plot(t(1:800),longit*180/pi),xlabel('t (s)'),ylabel('longit grd'),grid,pause;
+        
+end;
+figure(1)
+plot(t,u),xlabel('t (s)'),ylabel('u(m)'),grid
+figure(2)
+plot(t,pitch*180/pi),xlabel('t (s)'),ylabel('pitch(deg)'),grid
+figure(3)
+plot(t,x),xlabel('t (s)'),ylabel('x(m)'),grid
+figure(5)
+plot(t,w),xlabel('t (s)'),ylabel('w(m)'),grid
+figure(6)
+plot(t,q),xlabel('t (s)'),ylabel('q(m)'),grid
+figure(7)
+plot(t,labi),xlabel('t (s)'),ylabel('labi(m)'),grid
+figure(8)
+plot(t,-z),xlabel('t (s)'),ylabel('h(m)'),grid
+figure(9)
+plot(t(1:800),longit*180/pi),xlabel('t (s)'),ylabel('longit grd'),grid
 
 

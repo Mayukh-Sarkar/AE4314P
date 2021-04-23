@@ -23,9 +23,9 @@ collect(1)=0.0662; %read from trim graph at 90kts [rad]
 longit(1)=0.01485; %read from trim graph at 90kts [rad]
 
 %gain values;
-k1 = 0.2;
-k2 = 0.2;
-k3 = 0.2;
+k1 = 0.09;
+k2 = 0.06;
+k3 = 0.01;
 
 %initial values;
 t0=0;
