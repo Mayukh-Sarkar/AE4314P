@@ -9,7 +9,7 @@
  rho=1.225; %density at ISA
  g=9.81;
  h=0.945; %height of the rotor above cg
- step=0.01; %for looping
+ stap=0.01; %for looping
  number=0;
 %control variables
  theta0=8.7*3.14/180; %collective
@@ -38,7 +38,7 @@
  a1(1)=0.0*3.14/180; %longitudinal disk tilt
  CTbem(1)=0.0; %thrust coeffi through BEM theory
  CTglau(1)=0.0; %thrust coeffi through Glauert
- A(1)=[]
+ A(1)=0.0;
  B(1)=0.0; %for CTglau calculation
  T(1)=0.0; %thrust
  D(1)=0.0; %drag
@@ -99,22 +99,25 @@
       xdot(i) = u(i)*cos(thetaf)+w(i)*sin(thetaf);
       zdot(i) =-c(i);
       lambdaidot(i) = (CTbem(i)-CTglau(i))/tau;
-      u(i+1) = u(i) + udot(i)*step;
-      w(i+1) = w(i)+ wdot(i)*step;
-      q(i+1) = q(i)+ qdot(i)*step;
-      thetaf(i+1) = thetaf(i) + thetafdot(i)*step;
-      x(i+1) = x(i) + xdot(i)*step;
-      z(i+1) = z(i) + zdot(i)*step;
-      lambdai(i+1) = lambdaidot(i)+ lambdaidot(i)*step;
+      u(i+1) = u(i) + udot(i)*stap;
+      w(i+1) = w(i)+ wdot(i)*stap;
+      q(i+1) = q(i)+ qdot(i)*stap;
+      thetaf(i+1) = thetaf(i) + thetafdot(i)*stap;
+      x(i+1) = x(i) + xdot(i)*stap;
+      z(i+1) = z(i) + zdot(i)*stap;
+      lambdai(i+1) = lambdaidot(i)+ lambdaidot(i)*stap;
       c(i)=u(i)*sin(thetaf(i))-w(i)*cos(thetaf(i));
       ht(i)=-z(i);
       cdesi=k9*(htdesi-ht(i))+k10*c(i);
       dcdot=(cdesi-c(i));
-      dc(i+1)=dc(i)+dcdot(i)*step;
+      dc(i+1)=dc(i)+dcdot(i)*stap;
       theta0=(5.01*3.14/180)+k7*dcdot+k8*dc;
       
  end
       
+ 
+ plot(t,ht)
+ 
       
              
                 
