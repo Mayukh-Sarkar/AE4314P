@@ -14,8 +14,8 @@ lok=7.8829; %checked but not sure
 gamma = lok;
 CDS=1.5; %checked
 mass=9979; %MTOW in kg
-W = mass * g;
-massa = W/g;
+W = mass;
+m = W;
 h = 1.86549073; %height of rotor above CG
 rho=1.225; %checked
 vtip=220.98; %checked
@@ -28,28 +28,19 @@ area=pi/4*diam^2;
 tau=0.1;		%time constant in dynamiCs inflow!!!
 
 
-% %gain values;
-% k1 = 0.9;
-% k2 = 0.6;
-% k3 = 0.07;
-% 
-% k4 = -0.0006;
-% k5 = 0.017;
-% k6 = 0.15;
-
 %gain values;
-k1 = 0.5;
-k2 = 0.0;
-k3 = 0.0;
+k1 = 0.09;
+k2 = 0.06;
+k3 = 0.01;
 
-k4 = 0;
-k5 = 0;
-k6 = 0;
+k4 = 0.1;
+k5 = 0.2;
+k6 = 0.15;
 
 %initial values;
 V_90 = 46.3; %m/s
-t0=0; %starts at 0 seconds
-% index_90 = 26; % index at which 46.3 m/s is best approximated in V_h, D_fus_h
+t0=0;
+index_90 = 26; % index at which 46.3 m/s is best approximated in V_h, D_fus_h
 D_fus_90 = CDS*0.5*rho*V_90^2;
 theta_f_90 = atan(-D_fus_90/W);
 Iyy = iy;
@@ -72,15 +63,14 @@ x(1)=x0;
 % lambda_i(1)=lambda_i0;
 lambda_i(1) = lambda_i0;
 z(1)=100;
-z_dot(1) = 0;
 D_fus(1) = D_fus_90;
 
 %desired conditions
 pitch_desired = theta_f_90;
-z_desired = 100;
+
 
 %INTEGRATION parameters
-n_steps = 100;
+n_steps = 800;
 t_end=80;
 step=(t_end-t0)/n_steps;
 
@@ -89,13 +79,7 @@ for i=1:n_steps
     %current state
 %     theta_c(i) = k1*(pitch(i) - pitch_desired) + k2*q(i) + k3 * (pitch(i) - pitch_desired)*t(i);
     theta_c(i) = k1*(pitch(i) - pitch_desired) + k2*q(i) + k3 * (pitch(i) - pitch_desired)*t(i);
-%     theta_0(i) = k4*(z(i) - z_desired) + k5 * z_dot(i) + k6 * (z(i) - z_desired)*t(i);
-    c(i)=u(i)*sin(pitch(i))-w(i)*cos(pitch(i));
-    v(i) = sqrt(u(i)^2 + w(i)^2);
-    v_des = 90;
-    c_des = k4*(z_desired - z(i));
-    theta_0(i) = 5/180*pi + k5*(c_des-c(i));
-    
+    theta_0(i) = k4*(pitch(i) - pitch_desired) + k5*q(i) + k6 * (pitch(i) - pitch_desired)*t(i);
     V(i) = sqrt(u(i)^2 + w(i)^2);
     alpha_c(i) = -atan(w(i)/u(i)) + theta_c(i);
     mu(i) = V(i)/(omega * diam/2)*cos(alpha_c(i));
@@ -110,12 +94,8 @@ for i=1:n_steps
     T(i) = pi*CT_BEM(i)*rho*omega^2*R^4;
     
     %EoM
-    u_dot(i) = -g*sin(pitch(i)) - D_fus(i)/mass * u(i)/V(i) + T(i)/massa * sin(theta_c(i) - a_1(i)) - q(i) * w(i);
-    w_dot(i) = g*cos(pitch(i)) - D_fus(i)/massa * w(i)/V(i) - T(i)/massa * cos(theta_c(i) - a_1(i)) + q(i) * u(i);
-    
-%     display(-T(i)/Iyy * h * sin(theta_c(i)-a_1(i)))
-%     display(-T(i)/Iyy)
-    
+    u_dot(i) = -g*sin(pitch(i)) - D_fus(i)/mass * u(i)/V(i) + T(i)/m * sin(theta_c(i) - a_1(i)) - q(i) * w(i);
+    w_dot(i) = g*cos(pitch(i)) - D_fus(i)/m * w(i)/V(i) - T(i)/m * cos(theta_c(i) - a_1(i)) + q(i) * u(i);
     q_dot(i) = -T(i)/Iyy * h * sin(theta_c(i)-a_1(i));
     pitch_dot(i) = q(i);
 %     x_dot(i) = u(i)*cos(pitch(i)) + w(i)*sin(pitch(i));

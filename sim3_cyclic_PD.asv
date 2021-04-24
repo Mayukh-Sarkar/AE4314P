@@ -27,7 +27,7 @@ V = 46.3;
 %initial values;
 t0=0;
 u0=0;
-w0=-8;
+w0=0;
 q0=0;
 pitch0=0*pi/180;
 x0=0;
@@ -65,7 +65,7 @@ v(i) = sqrt(u(i)^2 + w(i)^2);
 k1 = 0.06;
 k3 = 0.2;
 h_des = 100;
-v_des = 46.3;
+v_des = 90;
 c_des = k3*(h_des - h(i));
 collect(i) = 5/180*pi + k1*(c_des-c(i));
 
@@ -117,9 +117,9 @@ pitchdot(i)=q(i);
 xdot(i)=u(i)*cos(pitch(i))+w(i)*sin(pitch(i));
 
 zdot(i)=-c(i);
-uwens = 45;
+
 labidot(i)=(ctelem(i)-ctglau(i))/tau;
-corrdot(i)=uwens-u(i);
+%corrdot(i)=uwens-u(i);
 %corrcdot(i)=cwens(i)-c(i);
 c_des = k3*(h_des - h(i));
 collect(i) = 5/180*pi + k1*(c_des-c(i));
@@ -144,19 +144,19 @@ t(i+1)=t(i)+stap;
 end;
 figure(1)
 plot(t,u),xlabel('t (s)'),ylabel('u(m)'),grid
-% figure(2)
-% plot(t,pitch*180/pi),xlabel('t (s)'),ylabel('pitch(deg)'),grid
+figure(2)
+plot(t,pitch*180/pi),xlabel('t (s)'),ylabel('pitch(deg)'),grid
 figure(3)
 plot(t,x),xlabel('t (s)'),ylabel('x(m)'),grid
-% figure(5)
-% plot(t,w),xlabel('t (s)'),ylabel('w(m)'),grid
-% figure(6)
-% plot(t,q),xlabel('t (s)'),ylabel('q(m)'),grid
-% figure(7)
-% plot(t,labi),xlabel('t (s)'),ylabel('labi(m)'),grid
+figure(5)
+plot(t,w),xlabel('t (s)'),ylabel('w(m)'),grid
+figure(6)
+plot(t,q),xlabel('t (s)'),ylabel('q(m)'),grid
+figure(7)
+plot(t,labi),xlabel('t (s)'),ylabel('labi(m)'),grid
 figure(8)
 plot(t,-z),xlabel('t (s)'),ylabel('h(m)'),grid
-% figure(9)
-% plot(t(1:800),longit*180/pi),xlabel('t (s)'),ylabel('longit grd'),grid
+figure(9)
+plot(t(1:800),longit*180/pi),xlabel('t (s)'),ylabel('longit grd'),grid
 
 

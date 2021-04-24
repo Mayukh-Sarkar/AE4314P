@@ -37,7 +37,7 @@ for i = 1 : length(V) % hover to max speed in m/s
     
     theta_0 = (3./(8.*mu)).*(a_1.*(1-0.5.*mu.^2)+2*mu.*lambda_i+2*mu.*alpha_d + 2.*mu.*a_1);
 end 
-figure(1);
+figure;
 plot(V,rad2deg(a_1), 'r')
 hold on
 plot(V,rad2deg(theta_0) , 'b')
