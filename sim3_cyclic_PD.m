@@ -117,9 +117,9 @@ pitchdot(i)=q(i);
 xdot(i)=u(i)*cos(pitch(i))+w(i)*sin(pitch(i));
 
 zdot(i)=-c(i);
-
+uwens = 45;
 labidot(i)=(ctelem(i)-ctglau(i))/tau;
-%corrdot(i)=uwens-u(i);
+corrdot(i)=uwens-u(i);
 %corrcdot(i)=cwens(i)-c(i);
 c_des = k3*(h_des - h(i));
 collect(i) = 5/180*pi + k1*(c_des-c(i));
