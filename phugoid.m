@@ -10,7 +10,7 @@ cla=5.73; % lift curve slope
 l = 0;
 Area = 3.14159.*R.*R; %area
 v_tip = 220.98; % tip velocity
-h=0.744;
+h=.744;
 rho = 1.225;
 mu=W./(9.81.*rho.*sigma.*Area.*R);
 iB=Iyy./(W.*R.*R./9.81);
@@ -85,14 +85,7 @@ xT0=-tc.*da1_dT0-alfaD.*dtc_dT0-dhcd_dT0;
 zT0=-dtc_dT0;
 mT0p=-(l-h.*a1s).*dtc_dT0+(tc.*h).*da1_dT0+h.*dhcd_dT0;
 mT0=mu.*mT0p./iB;
-figure(1)
-plot(V,zu,'r')
-hold on
-plot(V,zw,'b')
-hold on
-plot(V,zq,'g')
-hold off
-tau = 0;
+tau  = 0;
 % LONGITUDINAL MATRICES FULL
 A1 = [xu xw -wc*cos(tau) xq;zu zw -wc*sin(0) mu+zq;0 0 0 1;mu+zu*mwp mw+zw*mwp -mwp*wc*sin(0) mq+mwp*(Vcap+zq)];
 B1 = [xB1 zB1 0 mB1+mwp*zB1; xT0 zT0 0 mT0p+mwp*zT0]';
@@ -105,4 +98,6 @@ sys = ss(A,B,C,D); % SYSTEM
 figure(1)
 pzmap(sys)
 grid on
+K = [0 0.03 0.13;0 0 0];
+A2 = A+B*K
 

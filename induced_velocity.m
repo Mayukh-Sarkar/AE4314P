@@ -31,10 +31,10 @@ v_i_low = vi_bar_low * vi_hover;
 x = linspace(25,200,8)*1000/3600;
 y1 = [11.1658    8.9004    6.7082 5.2856    4.2284    3.5237    3.0203    2.6428];
 y2 = [12.099 10.2994 6.3008 5.4526 4.2409 3.6351 3.0293 2.6657];
-plot(x,y1,'g')
-hold on
-plot(x,y2,'b')
-xlabel('Forward velocity(m/s)')
-ylabel('Induced velocity(m/s)')
-legend('Glauert','Haffner')
+% plot(x,y1,'g')
+% hold on
+% plot(x,y2,'b')
+% xlabel('Forward velocity(m/s)')
+% ylabel('Induced velocity(m/s)')
+% legend('Glauert','Haffner')
 

@@ -1,11 +1,10 @@
 %SIMULATION OF A CYCLIC PITCH INPUT THETA_C=1 DEG GIVEN FROM HOVER 
 %0.5 SEC<T<1 SEC. Now from the 15th second a PD controller becomes active 
-clear
 %INITIAL DATA HELICOPTER
 g=9.81;	
 cla = 5.73 ;%rad
 volh  = 0.082; %solidity of main rotor
-lok=7.8829; %checked but not sure
+lock=7.8829; %checked but not sure
 cds=1.5; %checked
 mass=9979; %MTOW
 rho=1.225; %checked
@@ -18,77 +17,195 @@ omega=vtip/(diam/2);
 area=pi/4*diam^2;
 collect(1)=0.0664;
 longit(1)=0.0148;
-V = 46.3;
-% D_fus = 0.5*cds*V^2;
-% theta_f = atan(-D_fus/W);
+%V = convvel(valuesToConvert, inputVelocityUnits, outputVelocityUnits);
 
 
-%initial values;
-t0=0;
-u0=0;
-w0=-8;
-q0=0;
-pitch0=0*pi/180;
-x0=0;
+t0 = 0;
+steps = 800;
+time = 500;
+stap = (time-t0)/800;
+
+
+V_man1 = convvel(90, 'kts', 'm/s');
+theta_c_gen = a_1(125);
+theta_0_gen = theta_0(125);
+collect=(theta_0_gen) + (steps-1)*(0);
+longit=(theta_c_gen) + (steps-1)*(0);
+
+u0=convvel(90, 'kts', 'm/s');
+
+
+
+w0 = 0;
+q0 = 0;
+pitch0 = -7.3*pi/180;
+
+x0 = 0;
 labi0=sqrt(mass*g/(area*2*rho))/vtip;
-dtf(1) = 0;
-t(1)=t0;
-u(1)=u0;
-w(1)=w0;
-q(1)=q0;
-pitch(1)=pitch0;
-x(1)=x0;
-labi(1)=labi0;
-z(1)=100;
-v(1) = 0;
-v_des = 46.3;
-%INTEGRATION 
-aantal=800;
-teind=80;
-stap=(teind-t0)/aantal;
-pitch_des = 2;
-V_des = 46.5;
-k1 = 0.9;
-k2 = 0.6;
-k3 = 0.07;
 
-k4 = -0.0006;
-k5 = 0.017;
-k6 = 0.15;
-for i=1:aantal 
-   if t(i)>=0.5 & t(i)<=1 longit(i)=1*pi/180;
-   else longit(i)=0*pi/180;
-   end
+t = (t0) + (steps-1)*(0);
+u=(u0) + (steps-1)*(0);
+w=(w0) + (steps-1)*(0);
+q=(q0) + (steps-1)*(0);
+pitch=(pitch0) + (steps-1)*(0);
+x=(x0) + (steps-1)*(0);
+z=(0) + (steps-1)*(0);
+longitgrad=(0) + (steps-1)*(0);
+qdiml=(0) + (steps-1)*(0);
+vdiml=(0) + (steps-1)*(0);
+phi=(0) + (steps-1)*(0);
+alpha_c = (0) + (steps-1)*(0);
+mu = (0) + (steps-1)*(0);
+labc = (0) + (steps-1)*(0);
+a1 = (0) + (steps-1)*(0);
+ctelem = (0) + (steps-1)*(0);
+alfd = (0) + (steps-1)*(0);
+ctglau = (0) + (steps-1)*(0);
+labidot = (0) + (steps-1)*(0);
+thrust = (0) + (steps-1)*(0);
+helling = (0) + (steps-1)*(0);
+vv = (0) + (steps-1)*(0);
+labi = (0) + (steps-1)*(0);
+
+udot = (0) + (steps-1)*(0);
+wdot = (0) + (steps-1)*(0);
+qdot = (0) + (steps-1)*(0);
+pitchdot = (0) + (steps-1)*(0);
+
+xdot = (0) + (steps-1)*(0);
+zdot = (0) + (steps-1)*(0);
+c = steps*(0);
+dc = steps*(0);
+v = steps*(0);
+dv = steps*(0);
+c_des=0;
+h_des = 100;
+pitch_des = 0;
+dtf = steps*(0);
+h = steps*(0);
+
+
+K1 = 0.03;
+K2 = 0.13;
+K3 = 0.0015;
+K4 = 0.0054;
+K5 = 0.51;
+K6 = 0.00;
+
+
+K7 = 0.084;
+K8 = 0.043;
+K9 = 0.0386;
+K10 = 0.91;
+
+V_man1 = convvel(90, 'kts', 'm/s');
+V_man2 = convvel(70, 'kts', 'm/s');
+V_man3 = convvel(90, 'kts', 'm/s');
+V_man4 = convvel(110, 'kts', 'm/s');
+V_margin = convvel(5, 'kts', 'm/s');
+minmantime = 30;
+man1 = true;
+man2 = true;
+man3 = true;
+man4 = true;
+checks = true;
+
+
+
+for i = 1 : length(steps)
+    if t(i)<=80
+        v_des =  V_man2;
+        theta_c_gen = a_1(111);
+        theta_0_gen = theta_0(111);
     
-   if t(i)>=15 ;%PD in deg
-       
-        dvdot(i) = v_des -v(i);
-        dv(i+1) = dv(i) + dvdot(i)*stap;
-        pitch_des = k4*dvdot(i) + k5*udot(i) + k6+dv(i+1);
-        dtfdot(i) = pitch(i) - pitch_des;
-        dtf(i+1) = dtf(i) + dtfdot(i)*stap;
-        longitgrd(i) = k1*dtf(i)*180/pi + k2*q(i)*180/3.14+k3*dtf(i+1)*180/3.14;%in rad
-        longit(i)=longitgrd(i)*pi/180;
-   end    
-   %longit(i)=longitgrd(i)*pi/180;	%in rad
-        v(i) = sqrt(u(i)^2 + w(i)^2);
+    if t(i)>80 && t(i)<=180
+       v_des =  V_man3;
+       theta_c_gen = a_1(125);
+       theta_0_gen = theta_0(125);
+    
+    if t(i)>80 && t(i)<180
+       v_des =  V_man4;
+       theta_c_gen = a_1(111);
+       theta_0_gen = theta_0(111);
+    
+        
    
-%    dv(i+1) = dv(i) +(V_des - v(i))*stap;
-%    pitch_des = k4*(V_des - v(i))+ k5*udot(i) + k6 * dv(i+1)
-%    
-%    dtf(i+1) = dtf(i) + (pitch(i)-pitch_des)*stap;
-%    longit(i) =theta_c_gen+k1*(pitch(i)-pitch_des)*180/pi +k2*q(i)*180/pi + dtf(i+1)
-  
-       
-%NO LAW FOR COLLECTIVE
+    v(i) = sqrt(u(i)^2 + w(i)^2);
+    if i+1 < steps
+        pitch_des = K4 * (v_des - u(i)) + K5 * udot(i) + K6 * dv(i);
+        dv(i+1) = dv(i) +(v_des-u(i))*stap;
+    
+    if (i + 1) < steps
+        dtf(i) = dtf(i) + (pitch(i) - pitch_des) * stap;
 
-    c(i)=u(i)*sin(pitch(i))-w(i)*cos(pitch(i));
-    h(i)=-z(i);
-    k1 = 0.06;
-    k3 = 0.2;
-    h_des = 100;
-    c_des = k3*(h_des - h(i));
-    collect(i) = 5/180*pi + k1*(c_des-c(i));
+        longit(i) =  K1 * (pitch(i) - pitch_des) * 180 / pi + K2 * q(i) * 180 /pi + K3 * dtf(i)*180/pi;
+    
+   
+        c(i) = u(i) *sin(pitch(i)) - w(i) *cos(pitch(i));
+        h(i) = -z(i);
+        c_des = K9 * (h_des - h(i)) + K10 * c(i);
+     if (i + 1) < steps
+            dc(i + 1) = dc(i) + (c_des - c(i)) * stap;
+            collect(i) = theta_0_gen + K7 * (c_des - c(i)) + K8 * dc(i + 1);
+     
+     countlst = zeros((minmantime/stap)) ; 
+     if checks == true
+       
+        if t(i) >= minmantime
+           if V_man2 - V_margin  <= u(i-j)&& u(j-i) <= V_man2 + V_margin
+                countlst(j) = 1;
+                
+           if sum(countlst) == length(countlst)
+                man1 = true;
+                theta_c_gen = a_1(111);
+                theta_0_gen = theta_0(111);
+                v_des = V_man3  ;
+         
+        
+        if man1 == true
+            countlst = zeros((minmantime/stap));
+            
+            for j = 1: length(minmantime/stap)
+                if V_man3 - V_margin  <= u(i+1-j) && u(i+1-j) <= V_man3 + V_margin
+                    countlst(j) = 1;
+                
+                if sum(countlst) == length(countlst)
+                    man2 = true;
+                    theta_c_gen = a_1(125);
+                    theta_0_gen = theta_0(125);                   
+                    v_des = V_man4  ;
+        
+        if man2 == true
+            countlst = zeros((minmantime/stap));
+            for j = 1: length(minmantime/stap)
+                if V_man4 - V_margin  <= u(i+1-j)&&u(i+1-j) <= V_man4 + V_margin
+                    countlst(j) = 1;
+                
+                if sum(countlst) == length(countlst)
+                    man3 = true;
+                   
+                end 
+                end
+            end
+        end
+                end
+                end
+            end
+        end
+           end
+           end
+        end
+     end
+     end
+    end
+    end
+    end
+    end
+    end
+
+
+     
+        
 
 %Defining the differential equations
 
@@ -109,7 +226,7 @@ mu(i)=vdiml(i)*cos(alfc(i));
 labc(i)=vdiml(i)*sin(alfc(i));
 
 %a1 Flapping calculi
-teller(i)=-16/lok*qdiml(i)+8/3*mu(i)*collect(i)-2*mu(i)*(labc(i)+labi(i));
+teller(i)=-16/lock*qdiml(i)+8/3*mu(i)*collect(i)-2*mu(i)*(labc(i)+labi(i));
 a1(i)=teller(i)/(1-.5*mu(i)^2);
 
 %the thrust coefficient
@@ -138,16 +255,9 @@ pitchdot(i)=q(i);
 xdot(i)=u(i)*cos(pitch(i))+w(i)*sin(pitch(i));
 
 zdot(i)=-c(i);
-uwens = 45;
+
 labidot(i)=(ctelem(i)-ctglau(i))/tau;
-corrdot(i)=uwens-u(i);
-%corrcdot(i)=cwens(i)-c(i);
-% dvdot(i) = v_des -v(i);
-% dv(i+1) = dv(i) + dvdot(i)*stap;
-% pitch_des = k4*dvdot(i) + k5*udot(i) + k6+dv(i+1);
-% dtfdot(i) = pitch(i) - pitch_des;
-% dtf(i+1) = dtf(i) + dtfdot(i)*stap;
-% longit(i) = k1*dtf(i)*180/pi + k2*q(i)*180/3.14+k3*dtf(i)*180/3.14;
+
 
 
 u(i+1)=u(i)+stap*udot(i);
@@ -159,19 +269,8 @@ x(i+1)=x(i)+stap*xdot(i);
 labi(i+1)=labi(i)+stap*labidot(i);
 z(i+1)=z(i)+stap*zdot(i);
 t(i+1)=t(i)+stap;
-
-
-
-% V(i) = sqrt(u(i)^2 + w(i)^2);
-%      if t(i) == 100
-%          Vdesi = 90;
-%          dvdot(i) = Vdesi - V(i);
-%          dx(i+1) =dx(i)+dxdot(i)*stap;
-%          pitchdesi(i) = k4*dxdot(i) +k5*u(i) + k6*dx(i);
-%      if 
-
-        
-end;
+end
+     
 figure(1)
 plot(t,u),xlabel('t (s)'),ylabel('u(m)'),grid
  figure(2)

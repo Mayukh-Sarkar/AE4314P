@@ -88,7 +88,10 @@ alpha_c = zeros(1, n_steps);
 for i=1:n_steps
     %current state
 %     theta_c(i) = k1*(pitch(i) - pitch_desired) + k2*q(i) + k3 * (pitch(i) - pitch_desired)*t(i);
+    
     theta_c(i) = k1*(pitch(i) - pitch_desired) + k2*q(i) + k3 * (pitch(i) - pitch_desired)*t(i);
+    
+  
 %     theta_0(i) = k4*(z(i) - z_desired) + k5 * z_dot(i) + k6 * (z(i) - z_desired)*t(i);
     c(i)=u(i)*sin(pitch(i))-w(i)*cos(pitch(i));
     v(i) = sqrt(u(i)^2 + w(i)^2);
