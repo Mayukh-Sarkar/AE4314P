@@ -1,7 +1,7 @@
 V = 46.3; % velocity
 W=9.81*9979; %weight
 R=8.18; %rotor diameter
-Iyy=94475.2116; %moment of inertia
+Iyy=94475; %moment of inertia
 gamma=7.889; % lock number
 sigma=0.082; % solidity
 SFP=2.13; % equivalent fuselage area
@@ -13,7 +13,7 @@ v_tip = 220.98; % tip velocity
 h=.744;
 rho = 1.225;
 mu=W./(9.81.*rho.*sigma.*Area.*R);
-iB=Iyy./(W.*R.*R./9.81);
+iB= Iyy./(W.*R.*R./9.81);
 d0=SFP./(sigma.*Area);
 nu0 = sqrt(W./(2.*rho.*Area));
 Vcap = V./v_tip;
@@ -90,7 +90,7 @@ tau  = 0;
 A1 = [xu xw -wc*cos(tau) xq;zu zw -wc*sin(0) mu+zq;0 0 0 1;mu+zu*mwp mw+zw*mwp -mwp*wc*sin(0) mq+mwp*(Vcap+zq)];
 B1 = [xB1 zB1 0 mB1+mwp*zB1; xT0 zT0 0 mT0p+mwp*zT0]';
 % PHUGOID APPROXIMATION MATRICES
-A = [xu -wc*cos(tau) xq;0 0 1;mu+zu*mwp  -mwp*wc*sin(0) mq+mwp*(Vcap+zq)];
+A = [xu -wc*cos(tau) xq;0 0 1;mu+zu*mwp  -mwp*wc*sin(0) mq+mwp*(mu+zq)];
 B = [xB1 0 mB1+mwp*zB1; xT0 0 mT0p+mwp*zT0]';
 C = eye(3,3);
 D = zeros(3,2);
@@ -98,6 +98,10 @@ sys = ss(A,B,C,D); % SYSTEM
 figure(1)
 pzmap(sys)
 grid on
-K = [0 0.03 0.13;0 0 0];
-A2 = A+B*K
+K = [0 0.3 0.013;0 0 0];
+A2 = A+B*K;
+figure(2)
+sys2 = ss(A2,B,C,D);
+pzmap(sys2)
+grid on
 
